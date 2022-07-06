@@ -1,8 +1,12 @@
-const { GraphQLString } = require('graphql')
-const hello = {
-    type: GraphQLString,
-    description: "Return string",
-    resolve: () => "Hello, world"
+const { GraphQLString, GraphQLList } = require('graphql');
+const { UserType } = require('./types');
+const { User } = require('../models')
+
+const users = {
+    type: new GraphQLList(UserType),
+    resolve() {
+        return User.find()
+    }
 }
 
-module.exports = {hello}
+module.exports = { users };
