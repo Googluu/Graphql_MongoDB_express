@@ -3,6 +3,7 @@ const { User, Post } = require('../models')
 const { createJWTToken } = require('../utils/auth')
 const { PostType } = require('./types')
 
+
 const register = {
     type: GraphQLString,
     description: "Register a new user as return and token",
@@ -43,26 +44,28 @@ const login = {
             username: user.username, 
             email: user.email, 
             displayName: user.displayName
-        })
+        });
 
         return token;
-    }
-}
+    },
+};
 
 const createPost = {
     type: PostType,
     description: "Create a new post",
     args: {
         title: { type: GraphQLString},
-        body: { type: GraphQLString}
+        body: { type: GraphQLString},
+
     },
     async resolve(_, args, { verifiedUser }) {
-        console.log(verifiedUser)
         const post = new Post({
             title: args.title,
             body: args.body,
-            authorId: verifiedUser._id
+            authorId: verifiedUser._id,
         })
+
+        await post.save()
 
         return post
     }
