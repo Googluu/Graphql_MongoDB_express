@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID } = require("graphql");
-const { User } = require('../models')
+const { User, Post } = require('../models')
 
 const UserType = new GraphQLObjectType({
     name: "UserType",
@@ -32,7 +32,23 @@ const PostType = new GraphQLObjectType({
     }
 });
 
+const CommentType = new GraphQLObjectType({
+    name: "CommentType",
+    description: "The comment type",
+    args: {
+        id: { type: GraphQLID },
+        comment: { type: GraphQLString },
+        userId: { type: UserType, reslve(parent) {
+            return User.findById(parent.userId);
+        } },
+        postId: { type: PostType, reslve(parent) {
+            return Post.findById(parent.postId);
+        } },
+    }
+});
+
 module.exports = {
     UserType,
-    PostType
+    PostType,
+    CommentType
 }
