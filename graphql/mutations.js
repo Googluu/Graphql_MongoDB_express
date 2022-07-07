@@ -166,6 +166,29 @@ const updateComment = {
     },
 };
 
+const deleteComment = {
+    type: GraphQLString,
+    description: 'Delete a comment',
+    args: {
+        id: {  type: GraphQLID  }
+    },
+    async resolve(_, {id}, {verifiedUser}) {
+        
+        if (!verifiedUser) throw new Error('Unauthorized');
+
+        const commentDelete = await Comment.findOneAndDelete(
+            {
+                _id: id,
+                userId: verifiedUser._id
+            }
+        );
+
+        if (!commentDelete) throw new Error('Comment not found');
+
+        return 'Comment deleted'
+    },
+};
+
 module.exports = {
     register,
     login,
@@ -173,5 +196,6 @@ module.exports = {
     updatePost,
     deletePost,
     addComment,
-    updateComment
+    updateComment,
+    deleteComment
 }
