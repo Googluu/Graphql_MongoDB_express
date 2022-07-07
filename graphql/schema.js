@@ -1,6 +1,13 @@
 const { GraphQLSchema, GraphQLObjectType } = require('graphql')
 const { users, user, posts, post } = require('./queries')
-const { register, login, createPost, updatePost, deletePost } = require('./mutations')
+const { 
+    register, 
+    login, 
+    createPost, 
+    updatePost, 
+    deletePost,
+    addComment
+ } = require('./mutations')
 
 
 const QueryType = new GraphQLObjectType({
@@ -22,7 +29,8 @@ const MutationType = new GraphQLObjectType({
         login,
         createPost,
         updatePost,
-        deletePost
+        deletePost,
+        addComment
     }
 });
 
